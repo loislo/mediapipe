@@ -14,6 +14,14 @@
 
 FROM ubuntu:22.04
 
+ARG UID
+ARG GID
+ARG USER_NAME
+
+RUN echo ${USER_NAME}
+RUN groupadd -g ${GID} ${USER_NAME} && \
+    useradd -u ${UID} -g ${USER_NAME} -s /bin/bash -m ${USER_NAME}
+
 MAINTAINER <mediapipe@google.com>
 
 WORKDIR /io
@@ -76,7 +84,13 @@ azel-${BAZEL_VERSION}-installer-linux-x86_64.sh" && \
     /bazel/installer.sh  && \
     rm -f /bazel/installer.sh
 
+USER $USER_NAME
+
+# copy mediapipe to the image for running the bazel setup. Later it will be overriden by the docker mapping.
 COPY . /mediapipe/
 
-# If we want the docker image to contain the pre-built object_detection_offline_demo binary, do the following
-# RUN bazel build -c opt --define MEDIAPIPE_DISABLE_GPU=1 mediapipe/examples/desktop/demo:object_detection_tensorflow_demo
+# setup bazel
+RUN GLOG_logtostderr=1 bazel run --define MEDIAPIPE_DISABLE_GPU=1 mediapipe/examples/desktop/hello_world
+
+
+
