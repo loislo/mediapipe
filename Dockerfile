@@ -84,13 +84,17 @@ azel-${BAZEL_VERSION}-installer-linux-x86_64.sh" && \
     /bazel/installer.sh  && \
     rm -f /bazel/installer.sh
 
+COPY . /mediapipe/
+
+RUN ./setup_android_sdk_and_ndk.sh /Android/Sdk /Android/Ndk r21 --accept-licenses
+
 USER $USER_NAME
 
 # copy mediapipe to the image for running the bazel setup. Later it will be overriden by the docker mapping.
-COPY . /mediapipe/
 
 # setup bazel
 RUN GLOG_logtostderr=1 bazel run --define MEDIAPIPE_DISABLE_GPU=1 mediapipe/examples/desktop/hello_world
 
+RUN bazel build -c opt --config=android_arm64 mediapipe/examples/android/src/java/com/google/mediapipe/apps/handtrackinggpu:handtrackinggpu
 
 

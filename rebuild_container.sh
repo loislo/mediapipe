@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set +e
+
 echo stop mediapipe
 docker stop mediapipe
 echo delete meidapipe
