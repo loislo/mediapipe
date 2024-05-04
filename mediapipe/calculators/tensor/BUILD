@@ -707,8 +707,10 @@ cc_library(
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/strings:str_format",
         "@com_google_absl//absl/types:span",
         "@org_tensorflow//tensorflow/lite:framework_stable",
+        "@org_tensorflow//tensorflow/lite:string_util",
         "@org_tensorflow//tensorflow/lite:type_to_tflitetype",
         "@org_tensorflow//tensorflow/lite/c:common",
     ] + select({
@@ -730,6 +732,7 @@ cc_test(
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/types:span",
         "@org_tensorflow//tensorflow/lite:framework_stable",
+        "@org_tensorflow//tensorflow/lite:string_util",
         "@org_tensorflow//tensorflow/lite/c:common",
         "@org_tensorflow//tensorflow/lite/kernels:cast_test_common",
         "@org_tensorflow//tensorflow/lite/schema:schema_fbs",
@@ -1726,6 +1729,8 @@ cc_library(
         "//mediapipe/framework:calculator_context",
         "//mediapipe/framework:calculator_framework",
         "//mediapipe/framework:port",
+        "//mediapipe/framework/api2:node",
+        "//mediapipe/framework/api2:port",
         "//mediapipe/framework/formats:image",
         "//mediapipe/framework/formats:tensor",
         "//mediapipe/framework/port:ret_check",
@@ -2023,7 +2028,7 @@ cc_library(
         "image_to_tensor_converter_gl_buffer.h",
         "image_to_tensor_converter_gl_texture.h",
     ],
-    visibility = [":__pkg__"],
+    visibility = ["//visibility:private"],
 )
 
 cc_test(

@@ -19,6 +19,7 @@ public enum GenAiInferenceError: Error {
   case invalidResponse
   case illegalMethodCall
   case failedToComputeSizeInTokens(String?)
+  case failedToInitializeSession(String?)
 }
 
 extension GenAiInferenceError: LocalizedError {
@@ -30,8 +31,11 @@ extension GenAiInferenceError: LocalizedError {
     case .illegalMethodCall:
       return "Response generation is already in progress."
     case .failedToComputeSizeInTokens(let message):
-      let explanation = message ?? "An internal error occured."
+      let explanation = message == nil ? "An internal error occured." : message!
       return "Failed to compute size of text in tokens: \(explanation)"
+    case .failedToInitializeSession(let message):
+      let explanation = message == nil ? "An internal error occured." : message!
+      return "Failed to initialize LlmInference session: \(explanation)"
     }
   }
 }
@@ -50,6 +54,8 @@ extension GenAiInferenceError: CustomNSError {
       return 1
     case .failedToComputeSizeInTokens:
       return 2
+    case .failedToInitializeSession:
+      return 3
     }
   }
 }
